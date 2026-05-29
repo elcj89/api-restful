@@ -14,6 +14,10 @@ app.use(logger);
 app.use('/auth', autorizacionRutas); 
 app.use('/peliculas', verificarToken, peliculasRutas);
 
+app.get('/', async (req, res) => {
+res.send('API funcionando ...');
+});
+
 const iniciarServidor = async () => {
     try {
         await sequelize.authenticate();
