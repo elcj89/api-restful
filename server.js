@@ -14,9 +14,19 @@ app.use(logger);
 app.use('/auth', autorizacionRutas); 
 app.use('/peliculas', verificarToken, peliculasRutas);
 
-sequelize.sync().then(() => {
-  console.log('Base de datos Activada');
-  app.listen(3000, () => {
-    console.log('Servidor Activo');
-  });
-});
+const iniciarServidor = async () => {
+    try {
+        await sequelize.authenticate();
+        console.log('Conexión con PostgreSQL establecida correctamente.');
+        await sequelize.sync(); 
+        console.log('Base de datos sincronizada.');
+        const PORT = process.env.PORT || 3001;
+        app.listen(PORT, () => {
+            console.log(`API lista en http://localhost:${PORT}`);
+        });
+    } catch (error) {
+        console.error('Error al inicializar la base de datos:', error);
+    }
+};
+
+iniciarServidor();
